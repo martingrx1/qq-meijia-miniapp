@@ -1,0 +1,42 @@
+/* miniprogram/pages/setting/index.wxss */
+
+.section{
+  width: 90%;
+  margin: 10px auto 0;
+}
+.product-intro{
+  box-sizing: border-box;
+  width: 100%;
+  padding: 8px;
+  background-color: white;
+}
+.temp-images{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.temp-images-item{
+  flex-basis: 100%;
+  height: 200px;
+  margin-bottom: 10px;
+}
+
+.left-title-input{
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  line-height: 40px;
+}
+.left-title-input .input{ 
+  height: 40px;
+  padding: 0 10px;
+  background-color: #fff;
+}
+.left-title-input .title{
+  float: left;
+  height: 40px;
+  text-align: center;
+  padding: 0 10px;
+  background-color: gainsboro;
+}

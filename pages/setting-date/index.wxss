@@ -1,0 +1,42 @@
+/* miniprogram/pages/setting-date/index.wxss */
+#setting-date-page{
+  margin-top: 20px;
+  padding: 0 20px;
+  font-size: 18px;
+}
+
+.section{
+  display: flex;
+  height: 40px;
+  line-height: 40px;
+  margin-top: 10px;
+}
+
+.bold-text{
+  font-size: 16px;
+  padding-left: 10px;
+  font-weight: bold;
+}
+
+.section-view{
+  margin-left: 30px;
+}
+.section-title{
+   display: flex;
+}
+.submit-btn{
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+
+.sub-number-input{
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100px;
+  height: 30px;
+  border-radius: 20px;
+  text-align: center;
+  background-color: #fff;
+}

@@ -1,0 +1,4 @@
+/* miniprogram/pages/navigation/index.wxss */
+.nav{
+  margin-top: 20px;
+}

@@ -1,0 +1,36 @@
+<!--miniprogram/pages/setting/index.wxml-->
+<form class="submit-form">
+
+  <view class="section">
+    <textarea class="product-intro" cols="30" rows="10" placeholder="填写相关介绍" bindinput="introInput"></textarea>
+  </view>
+
+  <view class="section">
+    <view class="left-title-input">
+      <view class="title">顺 序</view>
+      <input type="text" class="input" type="number" bindinput="orderInput"/>
+    </view>
+  </view>
+
+  <view class="section">
+    <button bindtap="chooseImage" wx:if="{{tempImages <= 6}}">选择图片</button>
+  </view>
+
+  <view class="section">
+    <view class="temp-images">
+      <image wx:for="{{tempImages}}" class="temp-images-item" src="{{item}}"></image>
+    </view>
+  </view>
+
+
+
+  <view class="section">
+    <button bindtap="resetChoose">重新选择</button>
+  </view>
+
+  <view class="section">
+    <button bindtap="uploadProduct">上传</button>
+  </view>
+
+
+</form>
