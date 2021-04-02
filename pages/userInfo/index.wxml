@@ -1,0 +1,33 @@
+<!--pages/userInfo/userInfo.wxml-->
+<view class="aligh-center">
+	<view class="card-title">欢迎光临张小鱼美甲铺</view>
+	<view class="card">
+		<view class="section">
+			<view class="section-title">
+				<text>QQ号</text>
+			</view>
+			<view class="section-view">
+				<input type="number" class="input" data-type="qqNumber" bindinput="inputControl" value="{{qqNumber}}" />
+			</view>
+		</view>
+
+		<view class="section">
+			<view class="section-title">
+				<text>手机号</text>
+			</view>
+			<view class="section-view">
+				<input type="number" class="input" data-type="phoneNumber" bindinput="inputControl" value="{{phoneNumber}}" />
+			</view>
+		</view>
+	</view>
+	<view class="card-comment">以上信息仅需填写一次</view>
+</view>
+
+
+<button class="submit-btn bottom-btn" bindtap="submit" type="">提交</button>
+
+
+
+<!-- jxx
+网站建设 -> 网络管理 -> 目前网站还是空网站 -> 模板建站 ? 
+47799685 -->

@@ -1,6 +1,6 @@
-<!--miniprogram/pages/navigation/index.wxml-->
-
-
-
-<button class="nav" wx:for="{{nav}}"><navigator url="{{item.path}}" >{{item.title}}</navigator></button>
-
+<!-- miniprogram/pages/navigation/index.wxml -->
+<view style="margin:0 26px">
+    <button class="nav" wx:for="{{nav}}">
+        <navigator url="{{item.path}}">{{item.title}}</navigator>
+    </button>
+</view>

@@ -1,104 +1,76 @@
-<!--miniprogram/pages/setting-date/index.wxml-->
+<!-- miniprogram/pages/setting-date/index.wxml -->
 <view id="setting-date-page">
   <view class="section">
-    <picker bindchange="bindPickerChange" mode="date" start="2020-09-o1" end="2022-01-01" data-type="week"
-      data-status="start">
-      <view class="picker">
-        打工上班日 📣：{{startTime}}
-      </view>
+    <picker bindchange="bindPickerChange" mode="date" start="2020-09-01" end="2022-01-01" data-type="week" data-status="start">
+      <view class="picker">打工上班日 📣：{{startTime}}</view>
     </picker>
   </view>
-
   <view class="section">
-    <view class="picker">
-      打工结束日 🛀：{{endTime}}
-    </view>
+    <view class="picker">打工结束日 🛀：{{endTime}}</view>
   </view>
-
   <view class="section">
-    <picker bindchange="bindPickerChange" mode="selector" value="{{dateIndex}}" range="{{dates}}" data-status="date"
-      data-type="date" data-status="date">
-      <view class="picker">
-        今天星期几呀 🕺：{{dates[dateIndex]}}
-      </view>
+    <picker bindchange="bindPickerChange" mode="selector" value="{{dateIndex}}" range="{{dates}}" data-status="date" data-type="date" data-status="date">
+      <view class="picker">今天星期几呀 🕺：{{dates[dateIndex]}}</view>
     </picker>
   </view>
-
   <view class="section">
     <view class="section-title">
-      <text style="margin:auto">今天要当懒狗 🍔</text>
+      <text style="margin:auto">今天要当懒狗 🍔</text>
     </view>
     <view class="section-view">
       <switch bindchange="switchLazyDog" />
     </view>
   </view>
-
-
   <block wx:if="{{!lazyDog}}">
-
     <view class="section">
       <view class="section-title">
-        <text style="margin:auto">白天的接待时间呀 ☀</text>
+        <text style="margin:auto">白天的接待时间 ☀</text>
       </view>
-      <picker bindchange="bindPickerChange" value="{{mornginIndex}}" range="{{morningSubTime}}" data-type="date"
-        data-status="morning" class="picker bold-text">
+      <picker bindchange="bindPickerChange" value="{{mornginIndex}}" range="{{morningSubTime}}" data-type="date" data-status="morning" class="picker bold-text">
         {{morningSubTime[morningIndex]}}
       </picker>
     </view>
-
     <view class="section">
       <view class="section-title">
         <text style="margin:auto">金主数 💰</text>
       </view>
       <view class="section-view">
-        <input type="number" class="sub-number-input" data-type="morning" bindinput="inputControl"
-          value="{{morningCapacity}}" />
+        <input type="number" class="sub-number-input" data-type="morning" bindinput="inputControl" value="{{morningCapacity}}" />
       </view>
     </view>
-
     <view class="section">
       <view class="section-title">
-        <text style="margin:auto">下午的接待时间呀 🌥 </text>
+        <text style="margin:auto">下午的接待时间 🌥</text>
       </view>
-      <picker bindchange="bindPickerChange" value="{{afternoonIndex}}" range="{{afternoonSubTime}}" data-type="date"
-        data-status="afternoon" class="picker bold-text">
+      <picker bindchange="bindPickerChange" value="{{afternoonIndex}}" range="{{afternoonSubTime}}" data-type="date" data-status="afternoon" class="picker bold-text">
         {{afternoonSubTime[afternoonIndex]}}
       </picker>
     </view>
-
     <view class="section">
       <view class="section-title">
         <text style="margin:auto">金主数 💰</text>
       </view>
       <view class="section-view">
-        <input type="number" class="sub-number-input" data-type="afternoon" bindinput="inputControl"
-          value="{{afternoonCapacity}}" />
+        <input type="number" class="sub-number-input" data-type="afternoon" bindinput="inputControl" value="{{afternoonCapacity}}" />
       </view>
     </view>
-
     <view class="section">
       <view class="section-title">
-        <text style="margin:auto"> 晚上的接待时间呀 🌙</text>
+        <text style="margin:auto">傍晚的接待时间 🌙</text>
       </view>
-      <picker bindchange="bindPickerChange" value="{{eveningIndex}}" range="{{eveningSubTime}}" data-type="date"
-        data-status="evening" class="picker bold-text">
+      <picker bindchange="bindPickerChange" value="{{eveningIndex}}" range="{{eveningSubTime}}" data-type="date" data-status="evening" class="picker bold-text">
         {{eveningSubTime[eveningIndex]}}
       </picker>
     </view>
-
     <view class="section">
       <view class="section-title">
         <text style="margin:auto">金主数 💰</text>
       </view>
       <view class="section-view">
-        <input type="number" class="sub-number-input" data-type="evening" bindinput="inputControl"
-          value="{{eveningCapacity}}" />
+        <input type="number" class="sub-number-input" data-type="evening" bindinput="inputControl" value="{{eveningCapacity}}" />
       </view>
     </view>
-
   </block>
-
-
   <view class="section">
     <view class="section-view submit-btn">
       <button bindtap="judgeSubmit">👷 打工人启程</button>

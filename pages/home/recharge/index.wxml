@@ -1,0 +1,40 @@
+<!-- pages/userInfo/userInfo.wxml -->
+<view class="aligh-center">
+    <view class="card-title">余额充值</view>
+    <view class="card">
+        <view class="section">
+            <view class="section-title">
+                <text>手机号</text>
+            </view>
+            <view class="section-view">
+                <input type="number" class="input" data-type="phoneNumber" bindinput="inputControl" value="{{phoneNumber}}" />
+            </view>
+        </view>
+        <view class="section">
+            <view class="section-title">
+                <text>充值金额</text>
+            </view>
+            <view class="section-view">
+                <input type="number" class="input" data-type="rechargeBalance" bindinput="inputControl" value="{{rechargeBalance}}" />
+            </view>
+        </view>
+        <view class="section">
+            <view class="section-title">
+                <text>会员等级</text>
+            </view>
+            <view class="section-view">
+                <input type="number" class="input" data-type="vipLevel" bindinput="inputControl" value="{{vipLevel}}" />
+            </view>
+        </view>
+        <view class="section">
+            <view class="section-title">
+                <text>日期</text>
+            </view>
+            <view class="section-view">
+                <input type="text" class="input" data-type="date" bindinput="inputControl" value="{{date}}" />
+            </view>
+        </view>
+    </view>
+    <view class="card-comment">请确认以上信息</view>
+</view>
+<button class="submit-btn bottom-btn" bindtap="submit" type="">充值</button>

@@ -1,0 +1,64 @@
+<!-- miniprogram/pages/home/index.wxml -->
+<wxs src="./parse.wxs" module="parse" />
+<wxs src="./filter.wxs" module="filter" />
+<view class="home-page">
+  <view class="date-info">
+    <view bindtap="gotoSettingNavPage">本 周 预 约 时 间 表</view>
+    <view>{{startTime}} 至 {{endTime}}</view>
+    <view>左右滑动切换周数</view>
+  </view>
+  <swiper class="swiper" bindanimationfinish="swiperChange" current="{{lastIndex}}">
+    <block wx:for="{{t.length}}" wx:key="*this">
+      <swiper-item>
+        <view class="sub-area">
+          <view class="sub-daily">
+            <view class="sub-item" wx:for="{{timeQuantum}}" wx:key="date">
+              <view class="sub-item-title {{index === dayIndex?'sub-item-active':''}}">
+                {{parse.index2Date(index)}}
+              </view>
+              <view class="sub-item-content sub-success" wx:if="{{filter.isSub(item.customers,_openid)}}">
+                您已预约
+              </view>
+              <view class="sub-item-content sub-relex" wx:elif="{{item.timestamp < todayTimestamp - 86400000}}">
+                已过期
+              </view>
+              <view class="sub-item-content sub-wait'" wx:elif="{{item.canSub && item.capacity > 0}}" data-index="{{index}}" data-dayinfo="{{item}}" bindtap="subDay">
+                {{item.contentText}} 剩余
+                {{item.capacity}} 人
+              </view>
+              <view class="sub-item-content sub-full" wx:else>当日预约已满</view>
+            </view>
+          </view>
+          <view class="sub-detail" wx:if="{{subDay}}">
+            <view class="sub-detail-title">当日预约时间段:</view>
+            <block wx:for="{{subDay.dayPlan}}">
+              <button class="confirm-timequantum {{selectTimeIndex === index ? 'sub-wait':''}}" wx:if="{{ weekSubLimited && item.capacity}}" data-index="{{index}}" data-status="{{item.status}}" bindtap="selectTime">
+                <image src="/images/ml.png" class="select-icon" wx:if="{{index === selectTimeIndex}}"></image>
+                {{item.content}}: {{item.time}}
+              </button>
+            </block>
+          </view>
+          <button class="sub-confirm heartbeat" wx:if="{{weekSubLimited}}" open-type="getUserInfo" bindgetuserinfo="checkUserLogin" bindtap="subscribeAppMsg">
+            预约
+          </button>
+          <block wx:else>
+            <button class="sub-confirm grey" bindtap="showCancelModal">取消预约</button>
+            <view class="sub-info">
+              <view class="sub-info-title">您已预约</view>
+              <view class="sub-info-date">
+                {{subUserInfo.subInfo.date}} {{subUserInfo.subInfo.clock}}
+              </view>
+              <view class="sub-info-clock"></view>
+              <button class="text-button" open-type="addFriend" open-id="FD8E99EDAFFCD0C08E6C057993101F36">
+                点击添加小鱼QQ
+              </button>
+            </view>
+          </block>
+        </view>
+      </swiper-item>
+    </block>
+  </swiper>
+</view>
+<i-modal title="小提示" visible="{{ modalVisible }}" bind:ok="handleModelOk" show-cancel="{{false}}" ok-text="我知道啦">
+  <image class="notice-img" src="cloud://base-a8b157.6261-base-a8b157-1259697157/common/notice1.jpg" mode='widthFix' />
+</i-modal>

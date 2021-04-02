@@ -1,0 +1,23 @@
+<view class="aligh-top">
+    <view class="card-title">用户交易查询</view>
+    <view class="card">
+        <view class="section">
+            <view class="section-title">
+                <text>手机号</text>
+            </view>
+            <view class="section-view">
+                <input type="number" class="input" data-type="phoneNumber" bindinput="inputControl" value="{{phoneNumber}}" />
+            </view>
+        </view>
+    </view>
+    <view class="card-comment">请确认以上信息</view>
+    <view class="container bg-white">
+        <view class="title">充值记录</view>
+        <i-cell wx:for="{{rechargeHistory}}" wx:key="index" title="充值金额 : {{item.rechargeBalance}}" label="{{item.date}}" value="会员等级为 :{{item.vipLevel}}星"></i-cell>
+    </view>
+    <view class="container bg-white">
+        <view class="title">消费记录</view>
+        <i-cell wx:for="{{costHistory}}" wx:key="{{item.style}}" title="{{item.style}}" label="{{item.date}}" value="实付:{{item.discountCost}} 原价:{{item.originCost}}"></i-cell>
+    </view>
+</view>
+<button class="submit-btn bottom-btn" bindtap="submit" type="">查询</button>

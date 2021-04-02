@@ -1,8 +1,6 @@
-<!--miniprogram/pages/home/admin/index.wxml-->
-
+<!-- miniprogram/pages/home/admin/index.wxml -->
 <view class="page">
   <button bindtap="selectWeek">选择日期</button>
-
   <view class="card-list">
     <view class="card {{item.subTimeOut ? 'gray-transparent flex-order-last' : ''}}" wx:for="{{subInfo}}">
       <view class="card-header">
@@ -19,20 +17,20 @@
         </view>
       </view>
       <view class="card-content">
-        <view class="title">{{item.subTimeOut?'已过期':'未做'}}</view>
-
-        <view class="content">
+        <view class="title">QQ: {{item.userInfo.qqNumber || '暂未填写'}}</view>
+        <!-- <view class="title">{{item.subTimeOut?'已过期':'未做'}} {{874146354}}</view> -->
+        <!-- <view class="content">
           <view class="image-area">
-            <image wx:for="{{3}}" mode="scaleToFill" class="prod-img"
-              src="https://thirdqq.qlogo.cn/qqapp/1110319052/608B197374AEAE4268ED7EE534BDDE50/100">
-            </image>
+            <image wx:for="{{3}}" mode="scaleToFill" class="prod-img" src="https://thirdqq.qlogo.cn/qqapp/1110319052/608B197374AEAE4268ED7EE534BDDE50/100"> </image>
           </view>
           <view class="price"> 45元</view>
-        </view>
-
+        </view> -->
       </view>
-      <view class="card-footer"></view>
+      <view class="card-footer">
+        <view class="right-btn" bindtap="cancelCustomerSub" data-subdayindex="{{item.subDayIndex}}" data-subdaytimeindex="{{item.subDayTimeIndex}}" data-suborder="{{item.subOrder}}">
+          踢除
+        </view>
+      </view>
     </view>
   </view>
-
 </view>

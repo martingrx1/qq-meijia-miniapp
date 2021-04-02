@@ -1,13 +1,15 @@
 {
   "pages": [
-    "pages/home/index",
+    "pages/home/home/index",
+    "pages/home/orderQuery/index",
+    "pages/userCenter/index",
+    "pages/home/recharge/index",
+    "pages/home/settlement/index",
+    "pages/userInfo/index",
     "pages/setting-date/index",
     "pages/show/index",
-
     "pages/setting/index",
-   
     "pages/home/admin/index",
-
     "pages/navigation/index"
   ],
   "window": {
@@ -20,18 +22,25 @@
   "tabBar": {
     "color": "#fff",
     "backgroundColor": "#CFAA9E",
-    "selectedColor":"#FFF",
-    "list": [{
-        "pagePath": "pages/home/index",
-        "iconPath": "images/tabbar/subscribe.png",
-        "selectedIconPath": "images/tabbar/subscribe.png",
-        "text": "预约"
-      },
+    "selectedColor": "#FFF",
+    "list": [
       {
         "pagePath": "pages/show/index",
         "iconPath": "images/tabbar/display.png",
         "selectedIconPath": "images/tabbar/display.png",
         "text": "展览"
+      },
+      {
+        "pagePath": "pages/home/home/index",
+        "iconPath": "images/tabbar/subscribe.png",
+        "selectedIconPath": "images/tabbar/subscribe.png",
+        "text": "预约"
+      },
+      {
+        "pagePath": "pages/userCenter/index",
+        "iconPath": "images/tabbar/usercenter.png",
+        "selectedIconPath": "images/tabbar/usercenter.png",
+        "text": "会员中心"
       }
     ]
   },

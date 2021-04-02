@@ -90,7 +90,8 @@ Page({
               products: _.push({
                 introText: this.data.introText,
                 imgUrl: uploadPath,
-                order: this.data.order
+                order: this.data.order,
+                isArrayImage:true
               })
             })
           }).then(() => {

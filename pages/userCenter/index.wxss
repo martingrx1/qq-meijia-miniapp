@@ -1,0 +1,18 @@
+.container {
+  margin: 16px 16px;
+  overflow: hidden;
+}
+
+.no-margin-both {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.bg-white {
+  background-color: #fff;
+}
+
+.title {
+  text-align: center;
+  margin: 16px auto;
+}

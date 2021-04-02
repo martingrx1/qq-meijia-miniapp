@@ -1,0 +1,21 @@
+<view class="container no-margin-both">
+    <i-card title="{{userInfo.userInfo.nickName || ''}}" extra="余额 : {{userInfo.balance || '0'}}元" thumb="{{userInfo.userInfo.avatarUrl || ''}}">
+        <view slot="content">
+            <!-- <i-tab-bar current="{{ current }}" bindchange="handleChange">
+                <i-tab-bar-item key="homepage" icon="homepage" current-icon="homepage_fill" title="Home"></i-tab-bar-item>
+                <i-tab-bar-item key="group" icon="group" current-icon="group_fill" title="Friends"></i-tab-bar-item>
+                <i-tab-bar-item key="remind" icon="remind" current-icon="remind_fill" count="3" title="Notice"></i-tab-bar-item>
+                <i-tab-bar-item key="mine" icon="mine" current-icon="mine_fill" dot title="My"></i-tab-bar-item>
+            </i-tab-bar> -->
+        </view>
+        <view style="text-align:left" slot="footer">{{userInfo.userInfo.phoneNumber || ''}}</view>
+    </i-card>
+</view>
+<view class="container bg-white">
+    <view class="title">充值记录</view>
+    <i-cell wx:for="{{rechargeHistory}}" title="充值金额 : {{item.rechargeBalance}}" label="{{item.date}}" value="会员等级为 :{{item.vipLevel}}星"></i-cell>
+</view>
+<view class="container bg-white">
+    <view class="title">消费记录</view>
+    <i-cell wx:for="{{costHistory}}" title="{{item.style}}" label="{{item.date}}" value="实付:{{item.discountCost}} 原价:{{item.originCost}}"></i-cell>
+</view>

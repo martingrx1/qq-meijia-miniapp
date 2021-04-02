@@ -5,16 +5,16 @@
     <block wx:for="{{swiperBackground}}" wx:key="*this">
       <swiper-item>
         <image class="image-full" mode="scaleToFill" src="{{item.url}}"></image>
-      </swiper-item>
+      </swiper-item> 16495069
     </block>
   </swiper> -->
   <view class="show-item" wx:for="{{products}}" style="order:{{item.order || 1}}">
     <block wx:if="{{item.isArrayImage}}">
       <image wx:for="{{item.imgUrl}}" wx:for-item="path" mode="widthFix" src="{{path}}" data-imgUrl="{{path}}"
-        class="item-image"></image>
+        class="item-image" lazy-load></image>
     </block>
     <block wx:else>
-      <image mode="widthFix" src="{{item.imgUrl}}" data-imgUrl="{{item.imgUrl}}" class="item-image"></image>
+      <image mode="widthFix" lazy-load src="{{item.imgUrl}}" data-imgUrl="{{item.imgUrl}}" class="item-image"></image>
     </block>
     <view class="item-intro">{{item.introText}} </view>
   </view>

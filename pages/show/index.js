@@ -47,7 +47,6 @@ Page({
     whereQuery('products', {
       _id: 'first'
     }).then((res) => {
-      console.log(res)
       this.setData({
         products: res[0].products
       })
