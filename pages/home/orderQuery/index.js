@@ -1,10 +1,13 @@
-import {whereQuery, addData, upDateData} from '../../../utils/dbAction';
+import {whereQuery} from '../../../utils/dbAction';
+import {queryDoc} from '../../../utils/cloudFnAction';
+
 Page({
   /**
    * 页面的初始数据
    */
   data: {
     phoneNumber: '',
+    userBalance: 0,
     rechargeHistory: [],
     costHistory: [],
     userInfo: {}
@@ -18,7 +21,7 @@ Page({
 
   async submit() {
     try {
-      let userInfo = (await whereQuery('user', {'userInfo.phoneNumber': this.data.phoneNumber}))[0];
+      let userInfo = (await queryDoc('user', {'userInfo.phoneNumber': this.data.phoneNumber}))[0];
       if (!userInfo) {
         wx.showToast({title: '未找到该顾客信息', icon: 'none'});
         return;
@@ -27,7 +30,7 @@ Page({
       let rechargeHistory = await whereQuery('recharge', {phoneNumber: this.data.phoneNumber});
       let costHistory = await whereQuery('order', {phoneNumber: this.data.phoneNumber});
 
-      this.setData({rechargeHistory, costHistory});
+      this.setData({rechargeHistory, costHistory, userBalance: userInfo.balance});
 
       wx.showToast({title: '操作成功', icon: 'success'});
     } catch (e) {

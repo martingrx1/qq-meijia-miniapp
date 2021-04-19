@@ -1,15 +1,12 @@
 // pages/userInfo/userInfo.js
-const db = wx.cloud.database();
-const app = getApp();
-import { upDateData } from '../../utils/dbAction';
+import {upDateData} from '../../utils/dbAction';
 Page({
   /**
    * 页面的初始数据
    */
   data: {
     qqNumber: '',
-    phoneNumber: '',
-    userInfo: {}
+    phoneNumber: ''
   },
 
   inputControl(e) {
@@ -20,16 +17,12 @@ Page({
 
   submit() {
     if (!this.data.qqNumber && !this.data.phoneNumber) {
-      wx.showToast({
-        title: '请填写完整信息',
-        icon: 'none'
-      });
+      wx.showToast({title: '请填写完整信息', icon: 'none'});
       return;
     }
 
     upDateData('user', this.data._id, {
       userInfo: {
-        ...this.data.userInfo,
         qqNumber: this.data.qqNumber,
         phoneNumber: this.data.phoneNumber
       },
@@ -46,8 +39,7 @@ Page({
     let params = JSON.parse(options.params);
 
     this.setData({
-      _id: params._id,
-      userInfo: params.userInfo
+      _id: params._id
     });
   },
 

@@ -1,6 +1,5 @@
-// miniprogram/pages/navigation/index.js
-const app = getApp();
 import {whereQuery, addData, upDateData} from '../../../utils/dbAction';
+import {queryDoc, updateDoc} from '../../../utils/cloudFnAction';
 import {debounce} from '../../../utils/lodash';
 Page({
   /**
@@ -26,19 +25,15 @@ Page({
       this.debounceSetDiscountCost();
     }
   },
+
   async setUserInfo() {
-    let userInfo = (await whereQuery('user', {'userInfo.phoneNumber': this.data.phoneNumber}))[0];
-    this.setData({
-      userInfo: userInfo
-    });
+    let userInfo = (await queryDoc('user', {'userInfo.phoneNumber': this.data.phoneNumber}))[0];
+    this.setData({userInfo: userInfo});
   },
   async setDiscountCost() {
     let {vipDiscount} = (await whereQuery('config', {type: 'global'}, {vipDiscount: true}))[0];
-    console.log(vipDiscount, this.data.userInfo.vipLevel);
     let discountCost = Math.floor(vipDiscount[this.data.userInfo.vipLevel] * this.data.originCost);
-    this.setData({
-      discountCost: discountCost
-    });
+    this.setData({discountCost: discountCost});
   },
 
   async submit() {
@@ -52,12 +47,16 @@ Page({
         wx.showToast({title: '折扣价格式输入错误', icon: 'none'});
         return;
       }
+      if (!userInfo.balance) {
+        wx.showToast({title: '该顾客信息还未录入', icon: 'none'});
+        return;
+      }
       if (userInfo.balance - this.data.discountCost < 0) {
         wx.showToast({title: '该顾客消费余额不足', icon: 'none'});
         return;
       }
       userInfo.balance -= this.data.discountCost;
-      await upDateData('user', userInfo._id, {balance: userInfo.balance});
+      await updateDoc('user', {_id: userInfo._id}, {balance: userInfo.balance});
       await addData('order', {
         style: this.data.style,
         phoneNumber: this.data.phoneNumber,
@@ -70,21 +69,13 @@ Page({
     } catch (e) {
       wx.showToast({title: '出错了', icon: 'none'});
     }
-
-    // if (!this.data.qqNumber && !this.data.phoneNumber) {
-    //   wx.showToast({
-    //     title: '请填写完整信息',
-    //     icon: 'none'
-    //   });
-    //   return;
-    // }
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     this.debounceSetUserInfo = debounce(this.setUserInfo, 1000);
-    this.debounceSetDiscountCost = debounce(this.setDiscountCost, 1000);
+    this.debounceSetDiscountCost = debounce(this.setDiscountCost, 500);
   },
 
   /**

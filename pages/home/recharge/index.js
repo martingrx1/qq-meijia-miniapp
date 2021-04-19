@@ -1,6 +1,5 @@
-// miniprogram/pages/navigation/index.js
-const app = getApp();
-import {whereQuery, addData, upDateData} from '../../../utils/dbAction';
+import {addData} from '../../../utils/dbAction';
+import {queryDoc, updateDoc} from '../../../utils/cloudFnAction';
 Page({
   /**
    * 页面的初始数据
@@ -21,16 +20,20 @@ Page({
 
   async submit() {
     try {
-      let userInfo = (await whereQuery('user', {'userInfo.phoneNumber': this.data.phoneNumber}))[0];
+      let userInfo = (await queryDoc('user', {'userInfo.phoneNumber': this.data.phoneNumber}))[0];
       if (!userInfo) {
         wx.showToast({title: '未找到该顾客信息', icon: 'none'});
         return;
       }
       let currentBalance = userInfo.balance ? userInfo.balance : 0;
-      await upDateData('user', userInfo._id, {
-        vipLevel: this.data.vipLevel,
-        balance: currentBalance + +this.data.rechargeBalance
-      });
+      await updateDoc(
+        'user',
+        {_id: userInfo._id},
+        {
+          vipLevel: this.data.vipLevel,
+          balance: currentBalance + +this.data.rechargeBalance
+        }
+      );
       await addData('recharge', {
         phoneNumber: this.data.phoneNumber,
         rechargeBalance: this.data.rechargeBalance,

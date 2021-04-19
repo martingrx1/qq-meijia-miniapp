@@ -1,6 +1,6 @@
 // miniprogram/pages/home/admin/index.js
-import { whereQuery, command, upDateData } from '../../../utils/dbAction';
-import { parseDateToTimestamp, findNearMonday } from '../../../utils/date';
+import {whereQuery, command, upDateData} from '../../../utils/dbAction';
+import {parseDateToTimestamp, findNearMonday, getTodayCnName} from '../../../utils/date';
 Page({
   /**
    * 页面的初始数据
@@ -13,7 +13,7 @@ Page({
   },
 
   formatDate(dates) {
-    let formatted = dates.map((v) => {
+    let formatted = dates.map(v => {
       return v.startTime + ' 至 ' + v.endTime;
     });
     this.setData({
@@ -25,9 +25,9 @@ Page({
     //格式化预约信息
     let tQ = this.data.timeQuantum;
     let formatted = tQ
-      .map((v) => {
+      .map(v => {
         return v.customers
-          .map((c) => {
+          .map((c, subOrder) => {
             let subInfo = {};
             subInfo.userInfo = {
               _openid: c._openid,
@@ -36,14 +36,16 @@ Page({
               qqNumber: c.qqNumber
             };
 
-            subInfo.subTimeOut =
-              parseDateToTimestamp(c.subInfo.date, c.subInfo.clock.split('-')[1]) < new Date().getTime() ? true : false; //预约过期
+            let timeoutStamp = parseDateToTimestamp(c.subInfo.date, c.subInfo.clock.split('-')[1]);
+
+            subInfo.subTimeOut = timeoutStamp < new Date().getTime() ? true : false; //预约过期
             subInfo.orderStamp = parseDateToTimestamp(c.subInfo.date, c.subInfo.clock.split('-')[0]); //按照预约时间排序
 
             subInfo.clock = c.subInfo.clock; //预约时间段
+            subInfo.cnDayName = getTodayCnName(timeoutStamp);
             subInfo.date = c.subInfo.date; //预约日
             subInfo.subDayIndex = c.subDayIndex; //预约日下表
-            subInfo.subOrder = c.order; //预约日下表
+            subInfo.subOrder = subOrder; //预约日下表
             subInfo.subDayTimeIndex = c.subDayTimeIndex;
             return subInfo;
           })
@@ -60,8 +62,8 @@ Page({
   selectWeek() {
     wx.showActionSheet({
       itemList: this.data.formattedData,
-      success: (r) => {
-        whereQuery('subscribe', this.data.originData[r.tapIndex]).then((data) => {
+      success: r => {
+        whereQuery('subscribe', this.data.originData[r.tapIndex]).then(data => {
           this.setData({
             timeQuantum: data[0].timeQuantum,
             _id: data[0]._id
@@ -87,8 +89,8 @@ Page({
 
           upDateData('subscribe', that.data._id, {
             timeQuantum: that.data.timeQuantum
-          }).then((r) => {
-            wx.showToast({ title: '操作成功', icon: 'none' });
+          }).then(r => {
+            wx.showToast({title: '操作成功', icon: 'none'});
             that.formatSubscribeInfo();
           });
         }
@@ -100,13 +102,13 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    const { previousTimestamp } = findNearMonday(new Date().getTime());
+    const {previousTimestamp} = findNearMonday(new Date().getTime());
     whereQuery(
       'subscribe',
-      { startTimestamp: command.gte(previousTimestamp) },
-      { _id: false, startTime: true, endTime: true },
+      {startTimestamp: command.gte(1608480000000)},
+      {_id: false, startTime: true, endTime: true},
       6
-    ).then((res) => {
+    ).then(res => {
       console.log(res);
       this.formatDate(res);
     });

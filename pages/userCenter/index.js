@@ -1,5 +1,4 @@
-// miniprogram/pages/setting/index.js
-import {whereQuery, addData, upDateData} from '../../utils/dbAction';
+import {whereQuery} from '../../utils/dbAction';
 const app = getApp();
 Page({
   /**
@@ -25,22 +24,20 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    let interval = setInterval(() => {
+    let interval = setInterval(async () => {
       if (app.globalData._openid) {
         clearInterval(interval);
-        whereQuery('user', {_openid: app.globalData._openid}).then(res => {
-          console.log(res);
-          this.setData({userInfo: res[0]});
+        let userInfo = (await whereQuery('user', {}))[0];
 
-          whereQuery('order', {phoneNumber: res[0].userInfo.phoneNumber}).then(res => {
-            this.setData({costHistory: res});
-            console.log(res);
-          });
-          whereQuery('recharge', {phoneNumber: res[0].userInfo.phoneNumber}).then(res => {
-            this.setData({rechargeHistory: res});
-            console.log(res);
-          });
-        });
+        if (userInfo) {
+          this.setData({userInfo});
+        }
+
+        if (userInfo.userInfo.phoneNumber) {
+          let costHistory = await whereQuery('order', {phoneNumber: userInfo.userInfo.phoneNumber});
+          let rechargeHistory = await whereQuery('recharge', {phoneNumber: userInfo.userInfo.phoneNumber});
+          this.setData({costHistory, rechargeHistory});
+        }
       }
     }, 0);
   },

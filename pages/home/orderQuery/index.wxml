@@ -12,6 +12,9 @@
     </view>
     <view class="card-comment">请确认以上信息</view>
     <view class="container bg-white">
+        <view class="title">余额 : {{userBalance}}</view>
+    </view>
+    <view class="container bg-white">
         <view class="title">充值记录</view>
         <i-cell wx:for="{{rechargeHistory}}" wx:key="index" title="充值金额 : {{item.rechargeBalance}}" label="{{item.date}}" value="会员等级为 :{{item.vipLevel}}星"></i-cell>
     </view>

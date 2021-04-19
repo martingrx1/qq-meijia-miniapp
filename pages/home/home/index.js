@@ -13,7 +13,7 @@ Page({
    */
   data: {
     t: [],
-    modalVisible: false,
+    modalVisible: true,
     lastCurrent: 0
   },
 
@@ -28,9 +28,9 @@ Page({
         style: null
       },
       dayIndex: -1, //选中的一周的哪一天
-      goSettingNavPage: 5,
       selectTimeIndex: -1, //预约入时间段状态
-      weekSubLimited: 1 //每周每人可预约上限
+      weekSubLimited: 1, //每周每人可预约上限
+      todayTimestamp: new Date().getTime()
     };
   },
   initPageData() {
@@ -52,34 +52,43 @@ Page({
       //用户信息存在,但未选择时间段
       wx.showToast({title: '请选择预约时间段', icon: 'none'});
     } else {
-      //用户信息存在,刷新用户信息
+      //,刷新用户信息
       this.refreshUserInfo(e.detail.userInfo);
     }
   },
   refreshUserInfo(userInfo) {
-    whereQuery('user', {
-      _openid: app.globalData._openid
-    })
+    whereQuery('user', {})
       .then(async r => {
-        userInfo = r.length ? {...r[0].userInfo, ...userInfo} : userInfo; //保存qq号 手机号等信息以防覆盖更新
-        this.data.userInfo = userInfo;
         //当已存在该用户信息,更新
         //未存在则新增该用户信息
-        (await r.length) ? upDateData('user', r[0]._id, {userInfo}) : addData('user', {userInfo});
-        return r;
+        userInfo = r.length ? {...r[0].userInfo, ...userInfo} : userInfo; //保存qq号 手机号等信息以防覆盖更新
+        let res = r.length ? await upDateData('user', r[0]._id, {userInfo}) : await addData('user', {userInfo});
+        this.data.userInfo = userInfo;
+        return r[0] || res;
       })
       .then(r => {
-        if (!r[0].cheeckedInfo) {
-          //没有输入对应用户信息
-          wx.navigateTo({
-            url: `/pages/userInfo/index?params=${JSON.stringify(r[0])}`
-          });
-        } else {
+        if (r.cheeckedInfo) {
           this.confirmSub(); //确认预约
+        } else {
+          //没有输入对应用户信息
+          wx.navigateTo({url: `/pages/userInfo/index?params=${JSON.stringify(r)}`});
         }
       });
   },
-  confirmSub() {
+  hasSubscribeCapacity(timeQuantum, dayIndex, selectTimeIndex) {
+    if (timeQuantum[dayIndex].dayPlan[selectTimeIndex].capacity == 0) {
+      return false;
+    }
+    return true;
+  },
+  async confirmSub() {
+    let weekInfo = await whereQuery('subscribe', {_id: this.data._id});
+    let hasCapacity = this.hasSubscribeCapacity(weekInfo[0].timeQuantum, this.data.dayIndex, this.data.selectTimeIndex); //判断是否还有预约名额
+
+    if (!hasCapacity) {
+      wx.showToast({title: '抱歉,当前时间预约已满', icon: 'none'});
+      return false;
+    }
     this.data.subDay.capacity--; // 预约日数量减少
     let subInfo = {
       date: this.data.subDay.date,
@@ -124,20 +133,16 @@ Page({
   async init() {
     this.initPageData(); //页面数据初始化
     await this.queryData();
-    this.getOpenid().then(r => {
-      wx.hideLoading();
-      this.setData({
-        _openid: r,
-        todayTimestamp: new Date().getTime()
-      });
-      this.filter();
-    });
+    let _openid = await this.getOpenid();
+    wx.hideLoading();
+    this.setData({_openid: _openid});
+    this.filter();
   },
 
   queryData() {
-    return new Promise((reslove, reject) => {
+    return new Promise(reslove => {
       const _ = db.command;
-      const {previousTimestamp, previousDate} = findNearMonday(new Date().getTime());
+      const {previousTimestamp} = findNearMonday(new Date().getTime());
 
       db.collection('subscribe')
         .where({
@@ -147,10 +152,7 @@ Page({
         .get({
           success: res => {
             res.data = res.data.map(t => {
-              return {
-                ...t,
-                ...this.defaultPageData()
-              };
+              return {...t, ...this.defaultPageData()};
             });
             let index = this.data.lastCurrent; //修复因切换导致默认加载第一项预约日期导致的bug
             this.setData({
@@ -168,17 +170,13 @@ Page({
 
   getOpenid() {
     //获取openid
-    return new Promise((reslove, reject) => {
-      function step() {
-        setTimeout(() => {
-          if (app.globalData._openid) {
-            reslove(app.globalData._openid);
-          } else {
-            step();
-          }
-        }, 10);
-      }
-      step();
+    return new Promise(reslove => {
+      let interval = setInterval(() => {
+        if (app.globalData._openid) {
+          clearInterval(interval);
+          reslove(app.globalData._openid);
+        }
+      }, 10);
     });
   },
 
@@ -271,13 +269,13 @@ Page({
 
   swiperChange({detail}) {
     for (const key in this.data) {
-      if (/^(t|__webviewId__|_openid|lastCurrent|todayTimestamp)$/.test(key)) continue; //要保留的页面属性值
+      if (/^(t|__webviewId__|_openid|lastCurrent|todayTimestamp|modalVisible)$/.test(key)) continue; //要保留的页面属性值
       this.data.t[this.data.lastCurrent][key] = this.data[key];
     }
     this.data.lastCurrent = detail.current;
 
     for (const key in this.data) {
-      if (/^(t|__webviewId__|_openid|lastCurrent|todayTimestamp)$/.test(key)) continue; //更新页面信息为下一页
+      if (/^(t|__webviewId__|_openid|lastCurrent|todayTimestamp|modalVisible)$/.test(key)) continue; //更新页面信息为下一页
       this.data[key] = this.data.t[detail.current][key];
     }
     this.setData(this.data);
@@ -303,7 +301,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    //  subscribeAppMsg(APPCONF.TEMPLATES);
+    // subscribeAppMsg(APPCONF.TEMPLATES);
     wx.showLoading({
       title: '加载数据中'
     });

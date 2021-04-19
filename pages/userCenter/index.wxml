@@ -13,7 +13,11 @@
 </view>
 <view class="container bg-white">
     <view class="title">充值记录</view>
-    <i-cell wx:for="{{rechargeHistory}}" title="充值金额 : {{item.rechargeBalance}}" label="{{item.date}}" value="会员等级为 :{{item.vipLevel}}星"></i-cell>
+    <i-swipeout actions="{{actions}}" wx:for="{{rechargeHistory}}">
+        <view slot="content">
+            <i-cell title="充值金额 : {{item.rechargeBalance}}" label="{{item.date}}" value="会员等级为 :{{item.vipLevel}}星"></i-cell>
+        </view>
+    </i-swipeout>
 </view>
 <view class="container bg-white">
     <view class="title">消费记录</view>
